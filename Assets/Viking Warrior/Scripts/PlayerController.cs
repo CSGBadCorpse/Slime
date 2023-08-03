@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance;
+
     
     [Header("Character Attributes:")]
     public float CHARACTER_MOVE_SPEED = 1.0f;
@@ -21,6 +23,9 @@ public class PlayerController : MonoBehaviour
     public Animator animator;
 
 
+    private void Awake(){
+        Instance = this;
+    }
 
     // Start is called before the first frame update
     void Start(){
@@ -38,10 +43,10 @@ public class PlayerController : MonoBehaviour
 
         // Flips the player if headed in other direction
         if (movementDirection.x < 0){
-            Debug.Log("Facing Left");
+            // Debug.Log("Facing Left");
             transform.localScale = new Vector3(-1,1,1);
         } else if (movementDirection.x>0){
-            Debug.Log("Facing Right");
+            // Debug.Log("Facing Right");
             transform.localScale = new Vector3(1,1,1);
         }
 
