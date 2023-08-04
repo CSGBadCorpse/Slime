@@ -33,7 +33,7 @@ public class SlimeMove : MonoBehaviour
         slimeAction.OnHitted += SlimeAction_OnHitted;
         findPlayer = true;
         countDown = false;
-
+        //this.transform.position.x = 
     }
 
     private void SlimeAction_OnHitted(object sender, System.EventArgs e)
@@ -42,9 +42,9 @@ public class SlimeMove : MonoBehaviour
                                          transform.position.y - ((destinationPos.y - transform.position.y)/Mathf.Abs(destinationPos.y - transform.position.y))*0.5f);
     }
 
-    // Update is called once per frame
+
     private void Update()
-    {//animator.SetFloat(moveTrigger, 0);
+    {
         if (countDown)
         {
             StartCoroutine("HoldToFindPlayer");
