@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c2a44f97a2dd54488ed8aad043d7a03, type: 3}
+  m_Name: SlimeSpriteLibrartAssetSO_RPG
+  m_EditorClassIdentifier: 
+  spriteLibraryAssets:
+  - {fileID: 7108339969198208228, guid: 8cc06c60086fc014bb3e4b8ef5365d23, type: 3}
+  - {fileID: 7108339969198208228, guid: 09103590873dc6a4c8a66c533883f971, type: 3}
+  - {fileID: 7108339969198208228, guid: 3f72f1c875e932248be8c5c48fe52707, type: 3}
+  - {fileID: 7108339969198208228, guid: f47c763a04e12d449a338a19c65ab77a, type: 3}
+  - {fileID: 7108339969198208228, guid: efdd91e4cc44b3d4b9ac744b3b3beded, type: 3}
