@@ -2,4 +2,4 @@
 
 Slime Game
 
-![](./Assets/The Legend of Slim/00 Preview all/01.png)
+![](./Assets/The_Legend_of_Slim/00_Preview_all/01.png)
