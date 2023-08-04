@@ -7,7 +7,7 @@ AnimationClip:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Viking_Hit
-  serializedVersion: 6
+  serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
   m_UseHighQualityCurve: 1
@@ -21,19 +21,19 @@ AnimationClip:
   - curve:
     - time: 0
       value: {fileID: -3105102850563157647, guid: 28ef557c5baae48ea8a4fd05cb03f720, type: 3}
-    - time: 0.05
+    - time: 0.125
       value: {fileID: -7193941224417711964, guid: 28ef557c5baae48ea8a4fd05cb03f720, type: 3}
-    - time: 0.1
-      value: {fileID: 3555626859658932283, guid: 28ef557c5baae48ea8a4fd05cb03f720, type: 3}
-    - time: 0.15
-      value: {fileID: -4758762739179721453, guid: 28ef557c5baae48ea8a4fd05cb03f720, type: 3}
     - time: 0.25
+      value: {fileID: 3555626859658932283, guid: 28ef557c5baae48ea8a4fd05cb03f720, type: 3}
+    - time: 0.375
+      value: {fileID: -4758762739179721453, guid: 28ef557c5baae48ea8a4fd05cb03f720, type: 3}
+    - time: 0.625
       value: {fileID: -4758762739179721453, guid: 28ef557c5baae48ea8a4fd05cb03f720, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
     script: {fileID: 0}
-  m_SampleRate: 60
+  m_SampleRate: 24
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -58,7 +58,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.26666668
+    m_StopTime: 0.6666667
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0

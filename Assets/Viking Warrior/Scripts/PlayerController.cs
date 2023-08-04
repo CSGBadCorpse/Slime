@@ -1,16 +1,24 @@
+using JetBrains.Annotations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController Instance;
 
+    public class EnemyPosEventArgs : EventArgs {
+        public float x;
+        public float y;
+    }
+
     
     [Header("Character Attributes:")]
     public float CHARACTER_MOVE_SPEED = 1.0f;
     public int CHARACTER_MAX_HEALTH = 100;
-    int currentPlayerHealth;
+    [SerializeField]private int currentPlayerHealth;
 
     [Space]
     [Header("Character Stats:")]
@@ -22,6 +30,8 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D rb;
     public Animator animator;
 
+    [SerializeField] private GetHit getHit;
+
 
     private void Awake(){
         Instance = this;
@@ -30,8 +40,17 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start(){
         currentPlayerHealth = CHARACTER_MAX_HEALTH;
-
+        getHit.OnPlayerHit += GetHit_OnPlayerHit;
     }
+
+    private void GetHit_OnPlayerHit(object sender, EnemyPosEventArgs e)
+    {
+        float x = e.x;
+        float y = e.y;
+        transform.position = Vector2.MoveTowards(transform.position,new Vector2(x,y),-0.8f);
+        DiffHealth(-2);
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -49,8 +68,7 @@ public class PlayerController : MonoBehaviour
             // Debug.Log("Facing Right");
             transform.localScale = new Vector3(1,1,1);
         }
-
-
+        
     }
 
     void ProcessInputs (){
@@ -62,16 +80,19 @@ public class PlayerController : MonoBehaviour
         movementDirection.Normalize();
 
         if (Input.GetButtonDown("Fire1")) {
-            if (movementSpeed == 0) {
-                Attack("Slash");
-            } else {
+            
+            //aplsdjfodashjfk
+            if (movementSpeed < 0.5f) {
+                //Attack("Slash");
                 Attack("Thrust");
+
+                //adsfjdlksaj
+            }
+            else {
+                Attack("Slash");
+
             }
         } 
-
-        if (Input.GetKeyDown("k")){
-            DiffHealth(-20);
-        }
 
  
     }
@@ -89,13 +110,13 @@ public class PlayerController : MonoBehaviour
     }
     
     void Attack(string attackType){
-        Debug.Log(attackType);
+        //Debug.Log(attackType);
         if (attackType == "Slash"){
-            print ("Attack: Slash");
+            //print ("Attack: Slash");
             animator.SetTrigger("Slash");
         }
         else if (attackType =="Thrust"){
-                print ("Attack: Thrust");
+                //print ("Attack: Thrust");
                 animator.SetTrigger("Thrust");
         }
     
@@ -117,7 +138,7 @@ public class PlayerController : MonoBehaviour
             animator.SetTrigger("Hit");
             print ("I'm hit!");
         }
-
-        
     }
+
+
 }

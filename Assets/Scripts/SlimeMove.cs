@@ -9,7 +9,6 @@ public class SlimeMove : MonoBehaviour
 {
     const string moveTrigger = "move";
 
-
     [SerializeField] private float moveSpeed;
     [SerializeField] private Animator animator;
     [SerializeField] private SlimeAction slimeAction;
@@ -21,115 +20,77 @@ public class SlimeMove : MonoBehaviour
 
     [SerializeField] private SlimeSpriteLibraryAssetSO slimeSpriteLibraryAssetSO;
 
-    float h = 0;
-    float v = 0;
-    bool clicked = false;
-    bool findPlayer = false;
+    public bool findPlayer = false;
+    public bool countDown = false;
 
     int spriteLibraryAssetIndex = 0;
-    // Start is called before the first frame update
+
+
     private void Start()
     {
         animator = this.transform.GetChild(0).GetComponent<Animator>();
         slimeAction = this.transform.GetChild(0).GetComponent<SlimeAction>();
-        
+        slimeAction.OnHitted += SlimeAction_OnHitted;
+        findPlayer = true;
+        countDown = false;
+
+    }
+
+    private void SlimeAction_OnHitted(object sender, System.EventArgs e)
+    {
+        transform.position = new Vector2(transform.position.x - ((destinationPos.x - transform.position.x)/ Mathf.Abs(destinationPos.x - transform.position.x))*0.5f, 
+                                         transform.position.y - ((destinationPos.y - transform.position.y)/Mathf.Abs(destinationPos.y - transform.position.y))*0.5f);
     }
 
     // Update is called once per frame
     private void Update()
-    {
-        //Mathf.Abs(PlayerController.Instance.transform.position.x - transform.position.x)>0f||Mathf.Abs(PlayerController.Instance.transform.position.y - transform.position.y)>0f
-        if(!findPlayer){
-           StartCoroutine("HoldToFindPlayer");
+    {//animator.SetFloat(moveTrigger, 0);
+        if (countDown)
+        {
+            StartCoroutine("HoldToFindPlayer");
         }
 
-        if(findPlayer){
+        if (findPlayer) {
             destinationPos = PlayerController.Instance.transform.position;
-        }
-        
-        //float h = Input.GetAxis("Horizontal");
-        //float v = Input.GetAxis("Vertical");
-        // if (Input.GetMouseButtonDown(0))
-        // {
-        //     destinationPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        //     destinationPos.z = 0;
-
-        //     h = (destinationPos.x - transform.position.x); // Mathf.Abs(destinationPos.x - transform.position.x);
-        //     v = (destinationPos.y - transform.position.y); // Mathf.Abs(destinationPos.y - transform.position.y);
-        //     clicked = true;
-        // }
-        // if (h < 0f)
-        // {
-        //     transform.localScale = new Vector3(-1.0f, 1, 1);
-        // }
-        // else if (h > 0f)
-        // {
-        //     transform.localScale = new Vector3(1.0f, 1, 1);
-        // }
-        if ( destinationPos.x - transform.position.x < 0f)
-        {
-            transform.localScale = new Vector3(-1.0f, 1, 1);
-        }
-        else if ( destinationPos.x - transform.position.x> 0f)
-        {
-            transform.localScale = new Vector3(1.0f, 1, 1);
-        }
-        // if (Mathf.Abs(transform.position.x - destinationPos.x) != 0f || Mathf.Abs(transform.position.y - destinationPos.y) != 0f)
-        // {
-        //     animator.SetFloat(moveTrigger, Mathf.Abs(h) + Mathf.Abs(v));
-        //     // slimeAction.startJump = true;
-        // }
-        if (Mathf.Abs(transform.position.x - destinationPos.x) != 0f || Mathf.Abs(transform.position.y - destinationPos.y) != 0f)
-        {
-            animator.SetFloat(moveTrigger, Mathf.Abs(transform.position.x - destinationPos.x) + Mathf.Abs(transform.position.y - destinationPos.y));
-            // slimeAction.startJump = true;
-        }
-        if (Mathf.Abs(transform.position.x - destinationPos.x) <= 0f && Mathf.Abs(transform.position.y - destinationPos.y) <= 0f)
-        {
-            if(slimeAction.startJump == false){
-                animator.SetFloat(moveTrigger, 0);
-                // findPlayer = false;
-            }
-            
-            
+            destinationPos.z = 0;
         }
 
-        if (slimeAction.startJump)
+
+        float h = destinationPos.x - this.transform.position.x;
+        float v = destinationPos.y - this.transform.position.y;
+        if (h != 0 || v != 0)
         {
-            //clicked && 
-            if ((Mathf.Abs(transform.position.x - destinationPos.x) > 0f || Mathf.Abs(transform.position.y - destinationPos.y) > 0f))
-            {
-                transform.position = Vector2.MoveTowards(transform.position,destinationPos,moveSpeed*Time.deltaTime);
-                // this.transform.position = new Vector2(transform.position.x + h / Mathf.Abs(h) * moveSpeed * Time.deltaTime,
-                //                                   transform.position.y + v / Mathf.Abs(v) * moveSpeed * Time.deltaTime);
-            }
-            else if (clicked && (Mathf.Abs(transform.position.x - destinationPos.x) > 0f))
-            {
-                transform.position = Vector2.MoveTowards(transform.position,destinationPos,moveSpeed*Time.deltaTime);
-                // this.transform.position = new Vector2(transform.position.x + h / Mathf.Abs(h) * moveSpeed * Time.deltaTime,
-                //                                   transform.position.y);
-            }
-            else if (clicked && (Mathf.Abs(transform.position.y - destinationPos.y) > 0f))
-            {
-                transform.position = Vector2.MoveTowards(transform.position,destinationPos,moveSpeed*Time.deltaTime);
-                // this.transform.position = new Vector2(transform.position.x,
-                //                                  transform.position.y + v / Mathf.Abs(v) * moveSpeed * Time.deltaTime);
-            }
-            
-            
+            animator.SetFloat(moveTrigger, 0.5f);
         }
-        if((Mathf.Abs(transform.position.x - destinationPos.x) <= 0f && Mathf.Abs(transform.position.y - destinationPos.y) <= 0f)){
-            findPlayer = false;
+        //Debug.Log("h: " + h + " v: " + v);
+
+        if (h > 0)
+        {
+            this.transform.localScale = new Vector3(1f, 1f, 1f);
+        }
+        else if (h < 0)
+        {
+            this.transform.localScale = new Vector3(-1f, 1f, 1f);
+        }
+
+        if ((h > .1f || h < .1f || v > .1f || v < .1f)&&slimeAction.startJump)
+        {
+            this.transform.position = Vector2.MoveTowards(this.transform.position, destinationPos, moveSpeed * Time.deltaTime);
+            animator.SetFloat(moveTrigger, 0.5f);
+        }
+        //Debug.Log(slimeAction.animationFinish);
+        if (h == 0f && v == 0f && slimeAction.animationFinish)
+        {
+            animator.SetFloat(moveTrigger, 0f);
             slimeAction.startJump = false;
+            countDown = true;
+            findPlayer = false;
         }
-
-        
 
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            
-            if(spriteLibraryAssetIndex==slimeSpriteLibraryAssetSO.spriteLibraryAssets.Count){
+            if (spriteLibraryAssetIndex==slimeSpriteLibraryAssetSO.spriteLibraryAssets.Count){
                 spriteLibraryAssetIndex = 0;
             }
             
@@ -144,7 +105,8 @@ public class SlimeMove : MonoBehaviour
 
     IEnumerator HoldToFindPlayer(){
         yield return new WaitForSeconds(1f);
-        findPlayer = true; 
+        findPlayer = true;
+        countDown = false;
     }
 
     void OnDrawGizmos()
