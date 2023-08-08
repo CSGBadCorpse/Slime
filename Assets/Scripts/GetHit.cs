@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +12,7 @@ public class GetHit : MonoBehaviour
     {
         if (collision.transform.CompareTag("Enemy"))
         {
-            OnPlayerHit?.Invoke(this, new EnemyPosEventArgs {
+            OnPlayerHit?.Invoke(this, new EnemyPosEventArgs {//要知道碰到主角的史莱姆的位置
                 x = collision.transform.position.x,
                 y = collision.transform.position.y
             }) ;

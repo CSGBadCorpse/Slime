@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3821030720406821815}
   - component: {fileID: 894520510558240940}
   m_Layer: 0
-  m_Name: Slime
+  m_Name: Slime_Origin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55,6 +55,12 @@ MonoBehaviour:
   spriteRenderer: {fileID: 3821030722266951358}
   spriteLibrary: {fileID: 3821030722266951353}
   slimeSpriteLibraryAssetSO: {fileID: 11400000, guid: 766ba61f4df56ec45bd11078d095d727, type: 2}
+  slimeColors:
+  - {r: 0.46274513, g: 0.8431373, b: 0.9686275, a: 0}
+  - {r: 0.47450984, g: 0.47058827, b: 0.47450984, a: 0}
+  - {r: 0.56078434, g: 0.93725497, b: 0.43137258, a: 0}
+  - {r: 1, g: 0.50980395, b: 0.5058824, a: 0}
+  - {r: 0.9568628, g: 0.93725497, b: 0.43137258, a: 0}
   deathPartical: {fileID: 2782008981735145309}
   audioSource: {fileID: 894520510558240940}
   audioClips:
@@ -63,6 +69,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 377cbec7071a92547a3e94e2e662febf, type: 3}
   scoreValue: 2
   hitParticleSystem: {fileID: 3164151124453568850}
+  subHitParticleSystem: {fileID: 3164151124453568848}
 --- !u!82 &894520510558240940
 AudioSource:
   m_ObjectHideFlags: 0
@@ -309,7 +316,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdf0bd861d454a94aafd80a3c7f77437, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthMax: 2
+  healthMax: 4
   startJump: 0
   animationFinish: 0
 --- !u!70 &3821030722266951355
@@ -357,23 +364,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d3c5baf91c5cd0b4daf1b4ed1174347e, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: d3c5baf91c5cd0b4daf1b4ed1174347e, type: 3}
-      propertyPath: m_LocalRotation.x
       value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d3c5baf91c5cd0b4daf1b4ed1174347e, type: 3}
-      propertyPath: m_LocalRotation.y
+      propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d3c5baf91c5cd0b4daf1b4ed1174347e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: d3c5baf91c5cd0b4daf1b4ed1174347e, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.7071068
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d3c5baf91c5cd0b4daf1b4ed1174347e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 180
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d3c5baf91c5cd0b4daf1b4ed1174347e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -383,8 +390,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: d3c5baf91c5cd0b4daf1b4ed1174347e, type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d3c5baf91c5cd0b4daf1b4ed1174347e, type: 3}
+--- !u!198 &3164151124453568848 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 19800002, guid: d3c5baf91c5cd0b4daf1b4ed1174347e, type: 3}
+  m_PrefabInstance: {fileID: 3164151124468641426}
+  m_PrefabAsset: {fileID: 0}
 --- !u!198 &3164151124453568850 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 19800000, guid: d3c5baf91c5cd0b4daf1b4ed1174347e, type: 3}

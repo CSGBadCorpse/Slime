@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.U2D.Animation;
 using Lean.Pool;
 
+
 public class SlimeMove : MonoBehaviour,IPoolable
 {
     const string moveTrigger = "move";
@@ -20,6 +21,8 @@ public class SlimeMove : MonoBehaviour,IPoolable
 
     [SerializeField] private SpriteLibrary spriteLibrary;
     [SerializeField] private SlimeSpriteLibraryAssetSO slimeSpriteLibraryAssetSO;
+    //public Color m_Color = Color.black;
+    [SerializeField] private List<Color> slimeColors; 
     [SerializeField] private GameObject deathPartical;
 
     [SerializeField] private AudioSource audioSource;
@@ -28,6 +31,7 @@ public class SlimeMove : MonoBehaviour,IPoolable
     [SerializeField] private List<AudioClip> audioClips;
     [SerializeField] private int scoreValue;
     [SerializeField] private ParticleSystem hitParticleSystem;
+    [SerializeField] private ParticleSystem subHitParticleSystem;
     
 
     
@@ -39,14 +43,27 @@ public class SlimeMove : MonoBehaviour,IPoolable
     public void OnSpawn()//用对象池生成时，初始化操作
     {
         //audioClips.Clear();
-        audioSource.clip = null;
+        audioSource.clip = null;//置空音效，以免死亡时的音效没播完带过来
         slimeAction.gameObject.SetActive(true);
         deathPartical.SetActive(false);
-        findPlayer = true;
-        countDown = false;
+        findPlayer = true;//开始寻找玩家
+        countDown = false;//到达位置后停滞一段时间 （开始计时） 然后寻找玩家
         animator.SetFloat(moveTrigger, 0f);
-        slimeAction.startJump = false;
-        RandomSkin();
+        slimeAction.startJump = false;//史莱姆一开始不能跳，因为史莱姆的逻辑是跳起来才能移动
+        int index = RandomSkin();//随机肤色，返回随机肤色在SO中的下表，方便之后的图鉴和受击粒子颜色功能
+
+        //开始改变受击粒子特效的颜色，随史莱姆的颜色改变，要设置一下slimeColors
+        ParticleSystem.MainModule main = hitParticleSystem.main;
+        ParticleSystem.MainModule subMain = subHitParticleSystem.main;
+        //main.startC
+        float h, s, v;
+        Color.RGBToHSV(slimeColors[index], out h, out s, out v);
+        ParticleSystem.MinMaxGradient gradient = new ParticleSystem.MinMaxGradient(Color.HSVToRGB(h, s, v), Color.HSVToRGB(h, s, v - 0.2f));
+
+        //gradient.colorMax = Color.HSVToRGB(h, s, v);
+        //gradient.colorMin = Color.HSVToRGB(h, s, 0.8f);
+        main.startColor = gradient;
+        subMain.startColor = gradient;
     }
 
     public void OnDespawn()//对象池消除对象时，重置一些参数
@@ -64,6 +81,24 @@ public class SlimeMove : MonoBehaviour,IPoolable
         
     }
 
+    private void SlimeAction_OnHitted(object sender, SlimeAction.HitInfoEventArgs e)
+    {
+        //史莱姆受到攻击，向来的方向退0.5f 这里可以统一修改攻击力
+        //因为实际受击范围在子物体，但是实际的整体移动在父物体，所以用监听事件来做处理
+        transform.position = new Vector2(transform.position.x - ((destinationPos.x - transform.position.x) / Mathf.Abs(destinationPos.x - transform.position.x)) * 0.5f,
+                                         transform.position.y - ((destinationPos.y - transform.position.y) / Mathf.Abs(destinationPos.y - transform.position.y)) * 0.5f);
+        //audioSource.clip = audioClips[0];
+        audioSource.PlayOneShot(audioClips[0]);
+        Vector3 p = new Vector3(e.angle, 90, hitParticleSystem.gameObject.transform.rotation.z);
+
+        Quaternion quaternion = Quaternion.Euler(p);
+        hitParticleSystem.gameObject.transform.rotation = quaternion;
+
+        hitParticleSystem.gameObject.SetActive(true);
+        hitParticleSystem.Play();
+        
+    }
+
     private void SlimeAction_OnLanded(object sender, System.EventArgs e)
     {
         audioSource.clip = audioClips[2];
@@ -75,17 +110,6 @@ public class SlimeMove : MonoBehaviour,IPoolable
         Die();//史莱姆的生命为0时，死亡
     }
 
-    private void SlimeAction_OnHitted(object sender, System.EventArgs e)
-    {
-        //史莱姆受到攻击，向来的方向退0.5f 这里可以统一修改攻击力
-        //因为实际受击范围在子物体，但是实际的整体移动在父物体，所以用监听事件来做处理
-        transform.position = new Vector2(transform.position.x - ((destinationPos.x - transform.position.x)/ Mathf.Abs(destinationPos.x - transform.position.x))*0.5f, 
-                                         transform.position.y - ((destinationPos.y - transform.position.y)/Mathf.Abs(destinationPos.y - transform.position.y))*0.5f);
-        audioSource.clip = audioClips[0];
-        hitParticleSystem.gameObject.SetActive(true);
-        hitParticleSystem.Play();
-        audioSource.Play();
-    }
 
 
     private void Update()
@@ -144,12 +168,12 @@ public class SlimeMove : MonoBehaviour,IPoolable
         findPlayer = true;
         countDown = false;
     }
-    private void RandomSkin()//生成的时候按照SO随机生成皮肤
+    private int RandomSkin()//生成的时候按照SO随机生成皮肤
     {
+        int index = Random.Range(0, slimeSpriteLibraryAssetSO.spriteLibraryAssets.Count);
         spriteLibrary.m_SpriteLibraryAsset = 
-            slimeSpriteLibraryAssetSO.spriteLibraryAssets[
-                Random.Range(0, slimeSpriteLibraryAssetSO.spriteLibraryAssets.Count)
-            ];
+            slimeSpriteLibraryAssetSO.spriteLibraryAssets[index];
+        return index;
     }
 
     private void Die()
