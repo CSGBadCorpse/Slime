@@ -23,10 +23,14 @@ public class SlimeMove : MonoBehaviour,IPoolable
     [SerializeField] private GameObject deathPartical;
 
     [SerializeField] private AudioSource audioSource;
-    [SerializeField] private List<AudioClip> audioClips;
-
-    [SerializeField] private int scoreValue;
+    
     //0 hit 1 death 2 step
+    [SerializeField] private List<AudioClip> audioClips;
+    [SerializeField] private int scoreValue;
+    [SerializeField] private ParticleSystem hitParticleSystem;
+    
+
+    
 
     private bool findPlayer = false;
     private bool countDown = false;
@@ -78,6 +82,8 @@ public class SlimeMove : MonoBehaviour,IPoolable
         transform.position = new Vector2(transform.position.x - ((destinationPos.x - transform.position.x)/ Mathf.Abs(destinationPos.x - transform.position.x))*0.5f, 
                                          transform.position.y - ((destinationPos.y - transform.position.y)/Mathf.Abs(destinationPos.y - transform.position.y))*0.5f);
         audioSource.clip = audioClips[0];
+        hitParticleSystem.gameObject.SetActive(true);
+        hitParticleSystem.Play();
         audioSource.Play();
     }
 

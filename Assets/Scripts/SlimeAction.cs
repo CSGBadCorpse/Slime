@@ -22,7 +22,7 @@ public class SlimeAction : MonoBehaviour
     public bool animationFinish;
 
     
-
+    private Vector2 hitPos;
     private void Start()
     {
         startJump = false;
@@ -64,8 +64,23 @@ public class SlimeAction : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        // ContactPoint2D[] pos = new ContactPoint2D[10];
+        Collider2D[] pos = new Collider2D[10];
+        int contactpoints = collision.GetContacts(pos);
+        hitPos = pos[0].transform.position;
+        Debug.Log(pos[0].transform.position);
         if (collision.transform.CompareTag("PlayerHit"))
         {
+            // ContactPoint2D[] pos = new ContactPoint2D[10];
+            // int contactpoints = collision.GetContacts(pos);
+            // Debug.Log(contactpoints);
+            // for (int i=0;i<pos.Length;i++){
+            //     // if(pos[i]!=null){
+            //         Debug.Log("x:"+pos[i].point.x+" y: "+pos[i].point.y);
+            //     // }
+                
+            // }
+
             GetHit();
         }
     }
@@ -91,5 +106,20 @@ public class SlimeAction : MonoBehaviour
         animationFinish = true;
     }
     #endregion
+
+#if UNITY_EDITOR
+
+    void OnDrawGizmos()
+    {
+       // Draw a yellow sphere at the transform's position
+       Gizmos.color = Color.red;
+    //    if(hitPos!=Vector2.zero&&hitPos!=null){
+           Gizmos.DrawSphere(hitPos, 0.1f);
+    //    }
+
+    }
+#endif
+
+
 
 }

@@ -6,10 +6,12 @@ using UnityEngine.UI;
 
 public class Score : MonoBehaviour
 {
+    const string GetSoreAnimationTrigger="GetScore";
     public static Score Instance;
     private int score;
 
     [SerializeField] private TMP_Text scoreText;
+    [SerializeField] private Animator animator;
     private void Awake()
     {
         Instance = this;
@@ -38,6 +40,7 @@ public class Score : MonoBehaviour
     public void AddScore(int s)
     {
         score += s;
+        animator.SetTrigger(GetSoreAnimationTrigger);
     }
 
     public int GetScore()
